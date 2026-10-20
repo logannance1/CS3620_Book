@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container-fluid">
+    <h1>Book Library</h1>
+
+    <div class="row mb-2">
+      <div class="col-md-4">
+        <form action="" method="get" class="input-group">
+          <input type="search" name="book_name" class="form-control me-2"
+            value="{{ book_name|default:'' }}">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-4">
+      {% if book_object.has_previous %}
+        <div class="col-md-auto">
+            <a href="{% querystring page=1 %}"
+              class="btn btn-info"
+            >
+              First
+            </a>
+
+            <a href="{% querystring page=book_object.previous_page_number %}"
+              class="btn btn-secondary"
+            >
+              Previous
+            </a>
+        </div>
+      {% endif %}
+
+      {% if book_object.has_next %}
+        <div class="col-md-auto">
+            <a href="{% querystring page=book_object.next_page_number %}"
+              class="btn btn-success"
+            >
+              Next
+            </a>
+
+            <a href="{% querystring page=book_object.paginator.num_pages %}"
+              class="btn btn-warning">Last</a>
+        </div>
+      {% endif %}
+
+      <div class="col-md-auto">
+        <p>Page: {{ book_object.number }} of {{ book_object.paginator.num_pages }}</p>
+      </div>
+    </div>
+
+    {% for book_item in book_object %}
+      <div class="row mb-4">
+        <div class="col-md-auto">
+          <img src="{{ book_item.image.url }}" width="160">
+        </div>
+
+        <div class="col-3">
+          <h2>{{ book_item.name }}</h2>
+          <h4>{{ book_item.category|title }}</h4>
+          <h4>{{ book_item.rating }} / 5</h4>
+        </div>
+
+        <div class="col-4 fs-5">
+          <p>{{ book_item.description }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
